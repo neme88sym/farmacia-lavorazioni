@@ -1,1 +1,908 @@
-<html><body><p>In corso...</p></body></html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Farmacia Visigalli — Report Lavorazioni</title>
+<style>
+:root{--brand:#1a237e;--brand2:#283593;--bg:#f0f2f5;--cbg:#fff;
+  --sh:0 2px 8px rgba(0,0,0,.10);--r:12px;
+  --font:'Segoe UI',system-ui,-apple-system,Arial,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:#222}
+.site-header{position:sticky;top:0;z-index:100;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));
+  color:#fff;padding:14px 20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.htop{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:700;letter-spacing:.3px}
+.subtitle{font-size:13px;opacity:.75}
+.ts{font-size:12px;opacity:.60;margin-left:auto}
+.fbar{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.fbtn{border:none;border-radius:20px;padding:5px 14px;
+  font-size:12px;font-family:inherit;cursor:pointer;
+  background:rgba(255,255,255,.15);color:#fff;transition:background .15s}
+.fbtn.active,.fbtn:hover{background:rgba(255,255,255,.35)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:16px;padding:20px;max-width:1400px;margin:0 auto}
+.card{background:var(--cbg);border-radius:var(--r);box-shadow:var(--sh);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:box-shadow .2s,transform .15s}
+.card:hover{box-shadow:0 4px 18px rgba(0,0,0,.15);transform:translateY(-2px)}
+.card[hidden]{display:none!important}
+.card-header{display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;border-bottom:1px solid #f0f0f0}
+.cid{font-weight:700;color:#888;font-size:13px}
+.card-body{padding:12px 16px;flex:1;display:flex;flex-direction:column;gap:6px}
+.ctitle{font-size:16px;font-weight:600;color:#1a1a1a}
+.cmeta{font-size:12px;color:#888}
+.card-note{font-size:13px;color:#555;line-height:1.45}
+.drive-link{display:inline-block;margin-top:4px;font-size:12px;
+  color:#1E88E5;text-decoration:none}
+.drive-link:hover{text-decoration:underline}
+.badge{padding:3px 10px;border-radius:12px;font-size:11px;
+  font-weight:700;white-space:nowrap;text-transform:lowercase}
+.badge--da-creare{background:#E53935;color:#fff}
+.badge--pronta{background:#43A047;color:#fff}
+.badge--pubblicato{background:#546E7A;color:#fff}
+.badge--in-lavorazione{background:#FB8C00;color:#fff}
+.badge--programmato{background:#1E88E5;color:#fff}
+.badge--da-programmare{background:#8E24AA;color:#fff}
+.badge--bozza{background:#78909C;color:#fff}
+.badge--in-attesa{background:#FDD835;color:#333}
+.badge--sospeso{background:#CFD8DC;color:#555}
+.badge--annullato{background:#BDBDBD;color:#888;text-decoration:line-through}
+.badge--vuoto{background:#ECEFF1;color:#aaa}
+.card-media{display:flex;flex-wrap:wrap;gap:8px;
+  padding:10px 16px 14px;background:#f8f8f8}
+.thumb{position:relative;width:80px;height:80px;border-radius:6px;
+  overflow:hidden;background:#ddd;flex-shrink:0;cursor:pointer}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .2s}
+.thumb:hover img{transform:scale(1.06)}
+.thumb--v{background:#263238;cursor:default}
+.vph{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.tlabel{position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,.55);
+  color:#fff;font-size:10px;padding:1px 5px;border-radius:4px;pointer-events:none}
+.lb{display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.88);align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:90vw;max-height:90vh;border-radius:6px}
+.lb-x{position:absolute;top:14px;right:20px;font-size:36px;color:#fff;
+  cursor:pointer;background:none;border:none;line-height:1}
+footer{text-align:center;padding:24px;color:#aaa;font-size:12px}
+@media(max-width:480px){.grid{grid-template-columns:1fr;padding:10px}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="htop">
+    <span class="brand">Farmacia Visigalli</span>
+    <span class="subtitle">Report Lavorazioni</span>
+    <span class="ts">Aggiornato: 10/05/2026 21:12</span>
+  </div>
+  <div class="fbar">
+    <button class="fbtn active" data-filter="all">Tutti</button>
+<button class="fbtn" data-filter="grafica-da-creare">Grafica da creare (1)</button>
+<button class="fbtn" data-filter="grafica-pronta">Grafica Pronta (3)</button>
+<button class="fbtn" data-filter="pubblicato">Pubblicato (152)</button>
+
+  </div>
+</header>
+<main class="grid">
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0001</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">ECG x Attività sportive</h2><div class="cmeta">Evento: <strong>07/10/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0002</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Gold Collagen</h2><div class="cmeta">Evento: <strong>14/10/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">@neme88sym65@gmail.com puoi correggere la parte nella  grafica "presso le farmacie Visigalli"?</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0007</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata dei nei e delle malattie cutanee</h2><div class="cmeta">Evento: <strong>15/10/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0010</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata MOC Camozzi</h2><div class="cmeta">Evento: <strong>30/10/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0019</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">MyCli - Analisi della pelle</h2><div class="cmeta">Evento: <strong>12/11/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Verrà in farmacia la rappresentante MYCLI, avremo la possibilità di effettuare l'analisi della pelle e si potrà approfittare dello sconto 20%</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0020</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo La Roche Posay</h2><div class="cmeta">Evento: <strong>18/11/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">8€ di sconto con l'acquisto di un prodotto antietà</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0017</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata MOC Corridoni</h2><div class="cmeta">Evento: <strong>22/11/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0016</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata MOC Seriate</h2><div class="cmeta">Evento: <strong>23/11/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0022</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Black Friday</h2><div class="cmeta">Evento: <strong>25/11/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">20% sulla linea veralab
+30% sulla linea rilastil
+60% sulla linea neutrogena
+blackweek dal 25 al 30 novembre</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0021</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Black Friday</h2><div class="cmeta">Evento: <strong>27/11/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Dal 27 al 30 novembre sconto20% su tutti i prodotti Mycli</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0018</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata MOC Camozzi</h2><div class="cmeta">Evento: <strong>30/11/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0028</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Rilastil 6 Dic</h2><div class="cmeta">Evento: <strong>06/12/2024</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0030</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Test Udito</h2><div class="cmeta">Evento: <strong>15/01/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0041</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata thermacare</h2><div class="cmeta">Evento: <strong>28/01/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0043</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">My Collagene</h2><div class="cmeta">Evento: <strong>07/02/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0044</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">My Collagene</h2><div class="cmeta">Evento: <strong>17/02/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0045</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Gold Collagen</h2><div class="cmeta">Evento: <strong>25/02/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0042</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">La Roche Posay</h2><div class="cmeta">Evento: <strong>27/02/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0108</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Analisi della pelle</h2><div class="cmeta">Evento: <strong>24/09/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0126</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Black Week Seriate</h2><div class="cmeta">Evento: <strong>29/11/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0149</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">consulenza ISDIN</h2><div class="cmeta">Evento: <strong>19/03/2026</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0148</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Beauty Day Rilastil</h2><div class="cmeta">Evento: <strong>25/03/2026</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0150</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Consulenza la roche posay/cerave</h2><div class="cmeta">Evento: <strong>31/03/2026</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0147</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata nei e malattie cutanee</h2><div class="cmeta">Evento: <strong>09/04/2026</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0003</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Recensione Filippo</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0004</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo difese immunitarie</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0005</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Melatonina per sonno</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0006</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Tricologa</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">tutti i mesi una tricologa fa analisi cuoio capelluto</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0012</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Video Halloween</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">in attesa di video+copertina da Simo</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0013</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Vaccino Covid</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0014</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Vaccino antiinfluenzale</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0015</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Recensione Rosanna</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0023</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">acqua isotonica/ipertonica</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0024</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">aumento follower</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="grafica-da-creare">
+  <div class="card-header"><span class="cid">#0025</span><span class="badge badge--da-creare">Grafica da creare</span></div>
+  <div class="card-body"><h2 class="ctitle">servizi farmacia</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0026</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">foratura orecchie</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0027</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Calendario Avvento (IG Seriate)</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0029</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Cofanetti Natale</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0031</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Auguri Buon anno</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0032</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Malanni di stagione</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0033</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Protezione solare</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0034</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">4 step skincare</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0035</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Vitamina D</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0036</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Zinco</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0037</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Pelle secca</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0038</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Rilastil</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0039</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Jane Iredale</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0040</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Veralab</h2><div class="cmeta">Evento: <strong>dal 03/02/</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0046</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Banco Farmaceutico</h2><div class="cmeta">Evento: <strong>dal 04-02 </strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0047</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Nuova crema notte Mycly</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0048</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Mycli</h2><div class="cmeta">Evento: <strong>10-16 febb</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0049</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo SVR</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0050</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Miamo Cushion</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0051</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">BioNike</h2><div class="cmeta">Evento: <strong>fino al 31</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0052</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Miamo - Festa delle donne</h2><div class="cmeta">Evento: <strong>dal 28 Feb</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0054</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Consulenza nutrizionale</h2><div class="cmeta">Evento: <strong>2 aprile</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0055</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Bionike</h2><div class="cmeta">Evento: <strong>1 marzo - </strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0055</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Bionike</h2><div class="cmeta">Evento: <strong>1 marzo - </strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0056</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Post auguri festa della donna</h2><div class="cmeta">Evento: <strong>8 marzo</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0056</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Purae (2 grafiche per 2 prodotti)</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0057</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo MGKVIS</h2><div class="cmeta">Evento: <strong>fino esaur</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0058</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo BB Cream Gambe</h2><div class="cmeta">Evento: <strong>fino esaur</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0059</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Neavita</h2><div class="cmeta">Evento: <strong>fino esaur</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0060</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Salviettine acqua non acqua</h2><div class="cmeta">Evento: <strong>fino esaur</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0061</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Latte corpo Rilastil</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0062</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata nei e malattie cutanee</h2><div class="cmeta">Evento: <strong>23 aprile</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0063</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata nei e malattie cutanee</h2><div class="cmeta">Evento: <strong>29 aprile</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0064</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata nei e malattie cutanee</h2><div class="cmeta">Evento: <strong>6 giugno</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0065</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Recensione Marco</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0066</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Evento consulenza Miamo</h2><div class="cmeta">Evento: <strong>4 aprile</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0067</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Veralab</h2><div class="cmeta">Evento: <strong>dal 24 Mar</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0068</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Rilastil Corpo</h2><div class="cmeta">Evento: <strong>fino al 18</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0069</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Rilastil Viso</h2><div class="cmeta">Evento: <strong>fino al 18</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0070</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Naturamix</h2><div class="cmeta">Evento: <strong>fino al 30</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0071</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Miamo - Festa della mamma</h2><div class="cmeta">Evento: <strong>5 - 17 Mag</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0072</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Skin Ceuticals</h2><div class="cmeta">Evento: <strong>12 giugno</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0073</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Skin Glow</h2><div class="cmeta">Evento: <strong>Da 28 Apri</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0074</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Esami cardiovascolari</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0075</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Novità Collagen Skin Lift</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0076</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Solari scaduti</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0077</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Anticellulite</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Anticellulite</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0078</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Campagna nuovi follower IG</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0079</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Solari</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0080</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Solari</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0081</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Solari</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0082</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Integratori</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0083</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo anti traspiranti</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0084</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Diosmina della Sandoz</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0085</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Talco non talco</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0086</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Antizanzare per bambini</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0087</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Integratori</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0088</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Sali minerali</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0089</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Kit vacanze</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0090</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Fermenti lattici</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0091</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Salute occhi</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0092</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Nutrizionista</h2><div class="cmeta">Evento: <strong>12 e 26 Ag</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0093</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Pressione bassa</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0094</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Dermocosmesi</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0095</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Chiusura Camozzi</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0096</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Collagene Marino</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0097</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">abbronzatura post vacanze</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0098</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Back to school</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0099</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Skin care post estate</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0100</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Prevenzione Settembre</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0101</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Quiz</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Solo formato stories</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0102</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Recensione Elena M.</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0103</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Cambio stagione</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0104</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Chiedi al Farmacista</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0105</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Esfoliazione</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0106</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Creatina</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="grafica-pronta">
+  <div class="card-header"><span class="cid">#0107</span><span class="badge badge--pronta">Grafica Pronta</span></div>
+  <div class="card-body"><h2 class="ctitle">Quiz</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Dalla 10 in poi</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0109</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promozione Miamo</h2><div class="cmeta">Evento: <strong>Promo vali</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0110</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promozione La roche Posay</h2><div class="cmeta">Evento: <strong>Promo vali</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0111</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Nei e Malattie cutanee (?)</h2><div class="cmeta">Evento: <strong>23 ottobre</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0112</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Gold Collagen</h2><div class="cmeta">Evento: <strong>24 settemb</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0113</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Giornata La Roche Posay</h2><div class="cmeta">Evento: <strong>23 ottobre</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0114</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Armolipid</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0115</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Bioritmon Immuno Defend</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0116</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Campagna Vaccini</h2><div class="cmeta">Evento: <strong>13 ottobre</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0117</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Miamo</h2><div class="cmeta">Evento: <strong>Fino esaur</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0118</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Apivita</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0119</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">MyCli Black Friday</h2><div class="cmeta">Evento: <strong>Dal 24 al </strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0120 A</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Miamo - Crystal Oil Peptide Cleanser</h2><div class="cmeta">Evento: <strong>20/10/2025</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0120 B</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Miamo - Frutti Tropicali</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0120 C</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Miamo - Cozy Christmas</h2><div class="cmeta">Evento: <strong>dal 22/10/</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">manca solo mini icons - verso 8 dicembre</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0121</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Movember</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0122</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Avene ' Lip Butter</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0123</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Raffreddore e tosse</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0124</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Black Friday</h2><div class="cmeta">Evento: <strong>28-29 nove</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0125</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Miamo Black Friday</h2><div class="cmeta">Evento: <strong>dal 17 al </strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0127</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Rilastil</h2><div class="cmeta">Evento: <strong>Fino al 5 </strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0128</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Miamo</h2><div class="cmeta">Evento: <strong>Fino al 31</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0129</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Detox</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0130</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Aerosol</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0131</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Pelle secca</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0132</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Test intolleranze</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0133</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Test intolleranze</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0134</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Vitamina C</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0135</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Magnesio</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0136</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Veralab</h2><div class="cmeta">Evento: <strong>tutto febb</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0137</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Banco Farmaceutico</h2><div class="cmeta">Evento: <strong>10-16 febb</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0138</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Integratore Memoria</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0139</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Servizio di misurazione pressione</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0140</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Crema mani</h2><div class="cmeta">Creata: 09/05/2026</div></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0141</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Allergie</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0142</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">8 Marzo remind promo Veralab</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0143</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Stanchezza cambio stagione</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0144</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">SOS capelli</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0145</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Mycli</h2><div class="cmeta">Evento: <strong>2-8 Marzo</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">https://docs.google.com/document/d/1913QEgDzeHD8FWLpcUoab6whoacv3QNPsw4ACrYLYc4/edit?tab=t.7ldnxc88mj2g</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0146</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Natura Mix</h2><div class="cmeta">Evento: <strong>Fino a Giu</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0151</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Drenanti</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0152</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Mycli</h2><div class="cmeta">Evento: <strong>4-10 Maggi</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="grafica-pronta">
+  <div class="card-header"><span class="cid">#0153</span><span class="badge badge--pronta">Grafica Pronta</span></div>
+  <div class="card-body"><h2 class="ctitle">Crema HA PLAST</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0154</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo La Roche Posay</h2><div class="cmeta">Evento: <strong>Fino al 17</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="pubblicato">
+  <div class="card-header"><span class="cid">#0155</span><span class="badge badge--pubblicato">Pubblicato</span></div>
+  <div class="card-body"><h2 class="ctitle">Promo Tinta Bionike</h2><div class="cmeta">Evento: <strong>Fino al 30</strong> &nbsp;·&nbsp; Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+<article class="card" data-stato="grafica-pronta">
+  <div class="card-header"><span class="cid">#0156</span><span class="badge badge--pronta">Grafica Pronta</span></div>
+  <div class="card-body"><h2 class="ctitle">Recensione</h2><div class="cmeta">Creata: 09/05/2026</div><p class="card-note">Copy Post</p></div>
+  
+</article>
+</main>
+<div class="lb" id="lb">
+  <button class="lb-x" id="lb-x">&times;</button>
+  <img id="lb-img" src="" alt="">
+</div>
+<footer>Generato automaticamente &middot; Farmacia Visigalli Social Manager</footer>
+<script>
+(function(){
+  var btns=document.querySelectorAll('.fbtn');
+  var cards=document.querySelectorAll('.card');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      var f=this.dataset.filter;
+      btns.forEach(function(x){x.classList.remove('active')});
+      this.classList.add('active');
+      cards.forEach(function(c){
+        if(f==='all'||c.dataset.stato===f){c.removeAttribute('hidden')}
+        else{c.setAttribute('hidden','')}
+      });
+    });
+  });
+  var lb=document.getElementById('lb');
+  var lbImg=document.getElementById('lb-img');
+  window.openLB=function(el){
+    lbImg.src=el.querySelector('img').src;
+    lb.classList.add('open');
+  };
+  document.getElementById('lb-x').addEventListener('click',function(){lb.classList.remove('open')});
+  lb.addEventListener('click',function(e){if(e.target===lb)lb.classList.remove('open')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open')});
+})();
+</script>
+</body>
+</html>
